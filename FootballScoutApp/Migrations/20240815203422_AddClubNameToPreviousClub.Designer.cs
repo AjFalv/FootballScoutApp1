@@ -4,6 +4,7 @@ using FootballScoutApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballScoutApp.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240815203422_AddClubNameToPreviousClub")]
+    partial class AddClubNameToPreviousClub
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,19 +62,20 @@ namespace FootballScoutApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Appearances")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Appearances")
+                        .HasColumnType("int");
 
-                    b.Property<string>("CleanSheets")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("CleanSheets")
+                        .HasColumnType("int");
 
                     b.Property<string>("ClubName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Goals")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Goals")
+                        .HasColumnType("int");
 
                     b.Property<string>("UserProfileId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("YearFrom")
@@ -84,7 +88,7 @@ namespace FootballScoutApp.Migrations
 
                     b.HasIndex("UserProfileId");
 
-                    b.ToTable("PreviousClubs");
+                    b.ToTable("PreviousClub");
                 });
 
             modelBuilder.Entity("FootballScoutApp.Models.UserProfile", b =>
@@ -115,6 +119,7 @@ namespace FootballScoutApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("InjuryHistory")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lastname")
@@ -128,6 +133,7 @@ namespace FootballScoutApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PreferredFoot")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Weight")
@@ -367,7 +373,9 @@ namespace FootballScoutApp.Migrations
                 {
                     b.HasOne("FootballScoutApp.Models.UserProfile", "UserProfile")
                         .WithMany("PreviousClubs")
-                        .HasForeignKey("UserProfileId");
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserProfile");
                 });

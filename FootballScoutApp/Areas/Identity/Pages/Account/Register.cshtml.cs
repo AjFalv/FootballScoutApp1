@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using FootballScoutApp.Models;
+using FootballScoutApp.Data;
 
 namespace FootballScoutApp.Areas.Identity.Pages.Account
 {
@@ -33,6 +34,7 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDBContext _context;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -40,7 +42,8 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            RoleManager<IdentityRole> roleManager)
+            RoleManager<IdentityRole> roleManager,
+            ApplicationDBContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -49,6 +52,7 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _context = context;
         }
 
         /// <summary>
@@ -159,6 +163,19 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    // Create user profile
+                    var userProfile = new UserProfile
+                    {
+                        Id = user.Id,
+                        Firstname = Input.Firstname,
+                        Lastname = Input.Lastname,
+                        Expertise = Input.Role == "Scout" ? "" : null,
+                        Position = Input.Role == "Player" ? "" : null,
+                        Experience = Input.Role == "Player" ? 0 : (int?)null
+                    };
+                    _context.UserProfiles.Add(userProfile);
+                    await _context.SaveChangesAsync();
 
                     await _userManager.AddToRoleAsync(user, Input.Role);
 

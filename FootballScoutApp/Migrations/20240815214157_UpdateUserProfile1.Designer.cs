@@ -4,6 +4,7 @@ using FootballScoutApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballScoutApp.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240815214157_UpdateUserProfile1")]
+    partial class UpdateUserProfile1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,6 +75,7 @@ namespace FootballScoutApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserProfileId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("YearFrom")
@@ -128,6 +132,7 @@ namespace FootballScoutApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PreferredFoot")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Weight")
@@ -367,7 +372,9 @@ namespace FootballScoutApp.Migrations
                 {
                     b.HasOne("FootballScoutApp.Models.UserProfile", "UserProfile")
                         .WithMany("PreviousClubs")
-                        .HasForeignKey("UserProfileId");
+                        .HasForeignKey("UserProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("UserProfile");
                 });

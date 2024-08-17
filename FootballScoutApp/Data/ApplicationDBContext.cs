@@ -14,5 +14,24 @@ namespace FootballScoutApp.Data
         public DbSet<PlayerListEntity> PlayerList { get; set; }
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
+
+        // Add this line for PreviousClub
+        public DbSet<PreviousClub> PreviousClubs { get; set; }
+
+        public DbSet<UserProfile> UserProfiles { get; set; } 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<UserProfile>()
+                .HasKey(up => up.Id);
+
+            modelBuilder.Entity<UserProfile>()
+                .HasOne(up => up.User)
+                .WithOne()
+                .HasForeignKey<UserProfile>(up => up.Id)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

@@ -4,6 +4,7 @@ using FootballScoutApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FootballScoutApp.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240808191836_AddUserProfile")]
+    partial class AddUserProfile
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,87 +54,29 @@ namespace FootballScoutApp.Migrations
                     b.ToTable("PlayerList");
                 });
 
-            modelBuilder.Entity("FootballScoutApp.Models.PreviousClub", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Appearances")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CleanSheets")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClubName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Goals")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserProfileId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("YearFrom")
-                        .HasColumnType("int");
-
-                    b.Property<int>("YearTo")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("PreviousClubs");
-                });
-
             modelBuilder.Entity("FootballScoutApp.Models.UserProfile", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Birthplace")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("Experience")
+                    b.Property<int>("Experience")
                         .HasColumnType("int");
 
                     b.Property<string>("Expertise")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("Height")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InjuryHistory")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Lastname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Nationality")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Position")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferredFoot")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Weight")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -363,15 +308,6 @@ namespace FootballScoutApp.Migrations
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
 
-            modelBuilder.Entity("FootballScoutApp.Models.PreviousClub", b =>
-                {
-                    b.HasOne("FootballScoutApp.Models.UserProfile", "UserProfile")
-                        .WithMany("PreviousClubs")
-                        .HasForeignKey("UserProfileId");
-
-                    b.Navigation("UserProfile");
-                });
-
             modelBuilder.Entity("FootballScoutApp.Models.UserProfile", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
@@ -432,11 +368,6 @@ namespace FootballScoutApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("FootballScoutApp.Models.UserProfile", b =>
-                {
-                    b.Navigation("PreviousClubs");
                 });
 #pragma warning restore 612, 618
         }
