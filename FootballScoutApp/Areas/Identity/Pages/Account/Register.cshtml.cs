@@ -170,7 +170,6 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account
                         Id = user.Id,
                         Firstname = Input.Firstname,
                         Lastname = Input.Lastname,
-                        Expertise = Input.Role == "Scout" ? "" : null,
                         Position = Input.Role == "Player" ? "" : null,
                         Experience = Input.Role == "Player" ? 0 : (int?)null
                     };

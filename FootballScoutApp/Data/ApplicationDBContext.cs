@@ -15,15 +15,17 @@ namespace FootballScoutApp.Data
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
-        // Add this line for PreviousClub
         public DbSet<PreviousClub> PreviousClubs { get; set; }
 
-        public DbSet<UserProfile> UserProfiles { get; set; } 
+        public DbSet<UserProfile> UserProfiles { get; set; }
+
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Configure UserProfile
             modelBuilder.Entity<UserProfile>()
                 .HasKey(up => up.Id);
 
@@ -32,6 +34,20 @@ namespace FootballScoutApp.Data
                 .WithOne()
                 .HasForeignKey<UserProfile>(up => up.Id)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Message
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany()
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete to avoid multiple cascade paths
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Receiver)
+                .WithMany()
+                .HasForeignKey(m => m.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete to avoid multiple cascade paths
+
         }
     }
 }

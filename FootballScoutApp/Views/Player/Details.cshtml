@@ -1,42 +1,119 @@
-﻿@model FootballScoutApp.Models.PlayerListEntity
+﻿@model FootballScoutApp.Models.UserProfile
 
-@{
-    ViewData["Title"] = "Details";
-}
+<h2>Player Profile</h2>
 
-<h1>Details</h1>
+<div class="row">
+    <div class="col-md-6">
+        <!-- Display Profile Photo -->
+        <div class="form-group">
+            <label>Profile Photo</label>
+            @if (!string.IsNullOrEmpty(Model.ProfilePhotoPath))
+            {
+                <img src="@Model.ProfilePhotoPath" alt="Profile Photo" style="max-width:200px;" />
+            }
+            else
+            {
+                <p>No photo uploaded</p>
+            }
+        </div>
 
-<div>
-    <h4>PlayerListEntity</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Position)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+        <!-- Display Personal Information -->
+        <div class="form-group">
+            <label>Name</label>
+            <p>@Model.Firstname @Model.Lastname</p>
+        </div>
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <p>@Model.DateOfBirth?.ToString("yyyy-MM-dd")</p>
+        </div>
+        <div class="form-group">
+            <label>Age</label>
+            <p>@ViewBag.Age years</p>
+        </div>
+        <div class="form-group">
+            <label>Nationality</label>
+            <p>@Model.Nationality</p>
+        </div>
+        <div class="form-group">
+            <label>Birthplace</label>
+            <p>@Model.Birthplace</p>
+        </div>
+        <div class="form-group">
+            <label>Bio</label>
+            <p>@Model.Bio</p>
+        </div>
+
+        <!-- Display Player Information -->
+        <div class="form-group">
+            <label>Position</label>
+            <p>@Model.Position</p>
+        </div>
+        <div class="form-group">
+            <label>Preferred Foot</label>
+            <p>@Model.PreferredFoot</p>
+        </div>
+        <div class="form-group">
+            <label>Height</label>
+            <p>@Model.Height cm</p>
+        </div>
+        <div class="form-group">
+            <label>Weight</label>
+            <p>@Model.Weight kg</p>
+        </div>
+        <div class="form-group">
+            <label>Injury History</label>
+            <p>@Model.InjuryHistory</p>
+        </div>
+
+        <!-- Display Previous Clubs -->
+        @*<div class="form-group">
+            <label>Previous Clubs</label>
+            @if (Model.PreviousClubs != null)
+            {
+                <ul>
+                    @foreach (var club in JsonConvert.DeserializeObject<List<PreviousClub>>(Model.PreviousClubsJson))
+                    {
+                        <li>@club.ClubName (@club.YearFrom - @club.YearTo) - Appearances: @club.Appearances, Goals: @club.Goals, Clean Sheets: @club.CleanSheets</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No previous clubs listed</p>
+            }
+        </div>*@
+
+        <!-- Display YouTube Videos -->
+        @{
+            var videoUrls = !string.IsNullOrEmpty(Model.YoutubeVideoUrlsJson)
+            ? Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>(Model.YoutubeVideoUrlsJson)
+            : new List<string>();
+
+            // Convert regular YouTube URLs to embed URLs if necessary
+            for (int i = 0; i < videoUrls.Count; i++)
+            {
+                if (videoUrls[i].Contains("watch?v="))
+                {
+                    videoUrls[i] = videoUrls[i].Replace("watch?v=", "embed/");
+                }
+            }
+        }
+
+        <div class="form-group">
+            <label>Videos</label>
+            @if (videoUrls.Any())
+            {
+                @foreach (var url in videoUrls)
+                {
+                    <iframe width="560" height="315" src="@url" frameborder="0" allowfullscreen></iframe>
+                }
+            }
+            else
+            {
+                <p>No videos available</p>
+            }
+        </div>
+
+
+    </div>
 </div>

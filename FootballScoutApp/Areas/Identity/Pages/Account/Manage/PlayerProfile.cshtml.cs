@@ -3,12 +3,16 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using FootballScoutApp.Models;
 using FootballScoutApp.Data; // Add this namespace
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using FootballScoutApp.Helpers;
+
 
 namespace FootballScoutApp.Areas.Identity.Pages.Account.Manage
 {
@@ -49,16 +53,51 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account.Manage
             public int? Weight { get; set; }
             public string? InjuryHistory { get; set; }
             public List<PreviousClub> PreviousClubs { get; set; }
+
+            [Display(Name = "Profile Photo")]
+            public IFormFile ProfilePhoto { get; set; }
+            public string? ProfilePhotoPath { get; set; }
+
+            [Display(Name = "YouTube Video URLs")]
+            public List<string>? YoutubeVideoUrls { get; set; } // New field for the YouTube video URL
+
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
-            var userProfile = await _context.UserProfiles
-                                             .Include(up => up.PreviousClubs)
-                                             .FirstOrDefaultAsync(up => up.Id == user.Id);
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(up => up.Id == user.Id);
 
             if (userProfile != null)
             {
+                List<PreviousClub> previousClubs = new List<PreviousClub>();
+                List<string> youtubeVideoUrls = new List<string>();
+
+                // Safely deserialize the PreviousClubsJson field
+                if (!string.IsNullOrEmpty(userProfile.PreviousClubsJson))
+                {
+                    try
+                    {
+                        previousClubs = JsonConvert.DeserializeObject<List<PreviousClub>>(userProfile.PreviousClubsJson);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        previousClubs = new List<PreviousClub>(); // Default to empty list on error
+                    }
+                }
+
+                // Safely deserialize the YoutubeVideoUrlsJson field
+                if (!string.IsNullOrEmpty(userProfile.YoutubeVideoUrlsJson))
+                {
+                    try
+                    {
+                        youtubeVideoUrls = JsonConvert.DeserializeObject<List<string>>(userProfile.YoutubeVideoUrlsJson);
+                    }
+                    catch (JsonReaderException)
+                    {
+                        youtubeVideoUrls = new List<string>(); // Default to empty list on error
+                    }
+                }
+
                 Input = new InputModel
                 {
                     Firstname = userProfile.Firstname,
@@ -72,24 +111,17 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account.Manage
                     Height = userProfile.Height,
                     Weight = userProfile.Weight,
                     InjuryHistory = userProfile.InjuryHistory,
-                    PreviousClubs = userProfile.PreviousClubs.Select(pc => new PreviousClub
-                    {
-                        Id = pc.Id,
-                        ClubName = pc.ClubName,
-                        YearFrom = pc.YearFrom,
-                        YearTo = pc.YearTo,
-                        Appearances = pc.Appearances,
-                        Goals = pc.Goals,
-                        CleanSheets = pc.CleanSheets,
-                        UserProfileId = pc.UserProfileId // Ensure the UserProfileId is mapped
-                    }).ToList()
+                    PreviousClubs = previousClubs, // Loaded from JSON
+                    ProfilePhotoPath = userProfile.ProfilePhotoPath, // Load the profile photo path
+                    YoutubeVideoUrls = youtubeVideoUrls // Loaded from JSON
                 };
             }
             else
             {
                 Input = new InputModel
                 {
-                    PreviousClubs = new List<PreviousClub>() // Initialize with an empty list
+                    PreviousClubs = new List<PreviousClub>(), // Initialize with an empty list
+                    YoutubeVideoUrls = new List<string>() // Initialize with an empty list
                 };
             }
         }
@@ -103,6 +135,8 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            ViewData["Nationalities"] = ListHelpers.GetCountryList();
+
             await LoadAsync(user);
             return Page();
         }
@@ -112,73 +146,57 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                _logger.LogError($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
             {
-                _logger.LogWarning("ModelState is invalid.");
                 await LoadAsync(user);
                 return Page();
             }
 
             // Fetch the user's profile
-            var userProfile = await _context.UserProfiles
-                                             .Include(up => up.PreviousClubs)
-                                             .FirstOrDefaultAsync(up => up.Id == user.Id);
+            var userProfile = await _context.UserProfiles.FirstOrDefaultAsync(up => up.Id == user.Id);
 
             if (userProfile == null)
             {
-                _logger.LogInformation("Creating a new user profile.");
                 userProfile = new UserProfile { Id = user.Id };
                 _context.UserProfiles.Add(userProfile);
             }
-            else
+
+            // Update the YouTube Video URL
+            userProfile.YoutubeVideoUrlsJson = JsonConvert.SerializeObject(Input.YoutubeVideoUrls);
+
+            // Handle file upload
+            if (Input.ProfilePhoto != null)
             {
-                _logger.LogInformation("Updating existing user profile.");
-            }
-
-            // Remove only the PreviousClubs that have not been resubmitted
-            if (userProfile.PreviousClubs != null)
-            {
-                var clubsToRemove = userProfile.PreviousClubs
-                                               .Where(existingClub => !Input.PreviousClubs
-                                                                        .Any(inputClub => inputClub.Id == existingClub.Id))
-                                               .ToList();
-
-                _logger.LogInformation($"Removing {clubsToRemove.Count} previous clubs.");
-
-                _context.PreviousClubs.RemoveRange(clubsToRemove);
-            }
-
-            // Update or add the resubmitted clubs
-            foreach (var club in Input.PreviousClubs)
-            {
-                var existingClub = userProfile.PreviousClubs
-                                              .FirstOrDefault(c => c.Id == club.Id);
-
-                if (existingClub != null)
+                // Create a directory for the user if it doesn't exist
+                var userDirectory = Path.Combine("wwwroot/images/profiles", user.Id);
+                if (!Directory.Exists(userDirectory))
                 {
-                    _logger.LogInformation($"Updating club with ID {existingClub.Id}.");
-                    // Update existing club
-                    existingClub.ClubName = club.ClubName;
-                    existingClub.YearFrom = club.YearFrom;
-                    existingClub.YearTo = club.YearTo;
-                    existingClub.Appearances = club.Appearances;
-                    existingClub.Goals = club.Goals;
-                    existingClub.CleanSheets = club.CleanSheets;
+                    Directory.CreateDirectory(userDirectory);
                 }
-                else
+
+                // Create a unique filename
+                var fileName = $"{Guid.NewGuid()}_{Path.GetFileName(Input.ProfilePhoto.FileName)}";
+                var filePath = Path.Combine(userDirectory, fileName);
+
+                // Save the file to the server
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    _logger.LogInformation("Adding new club.");
-                    // Add new club
-                    club.UserProfileId = userProfile.Id;
-                    _context.PreviousClubs.Add(club);
+                    await Input.ProfilePhoto.CopyToAsync(stream);
                 }
+
+                // Save the relative path to the database
+                userProfile.ProfilePhotoPath = $"/images/profiles/{user.Id}/{fileName}";
             }
 
-            // Update user profile fields
+
+
+            // Serialize PreviousClubs to JSON and store it
+            userProfile.PreviousClubsJson = JsonConvert.SerializeObject(Input.PreviousClubs);
+
+            // Update other user profile fields
             userProfile.DateOfBirth = Input.DateOfBirth;
             userProfile.Nationality = Input.Nationality;
             userProfile.Birthplace = Input.Birthplace;
@@ -188,17 +206,14 @@ namespace FootballScoutApp.Areas.Identity.Pages.Account.Manage
             userProfile.Height = Input.Height;
             userProfile.Weight = Input.Weight;
             userProfile.InjuryHistory = Input.InjuryHistory;
+            /*userProfile.ProfilePhotoPath = Input.ProfilePhotoPath;*/ // Save the profile photo path
 
-            _logger.LogInformation("Saving changes to the database.");
+            // Convert the list of YouTube URLs to JSON and save it
+            userProfile.YoutubeVideoUrlsJson = JsonConvert.SerializeObject(Input.YoutubeVideoUrls);
 
-            // Save changes to the database
             await _context.SaveChangesAsync();
-
-            _logger.LogInformation("User updated their player profile.");
-
-            // Refresh the user's sign-in session to apply changes
             await _signInManager.RefreshSignInAsync(user);
-
+            _logger.LogInformation("User updated their player profile.");
             return RedirectToPage();
         }
 

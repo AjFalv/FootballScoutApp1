@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FootballScoutApp.Data;
 using FootballScoutApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using FootballScoutApp.Helpers;
 
 namespace FootballScoutApp.Controllers
 {
@@ -22,29 +23,158 @@ namespace FootballScoutApp.Controllers
         }
 
         // GET: Player
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string position = null, string nationality = null, string sortOrder = null)
         {
-              return _context.PlayerList != null ? 
-                          View(await _context.PlayerList.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDBContext.PlayerList'  is null.");
+            // Set default values to null if they are not provided
+            position = position ?? "";
+            nationality = nationality ?? "";
+
+            // Set ViewBag values for the selected options
+            ViewBag.SelectedPosition = position;
+            ViewBag.SelectedNationality = nationality;
+
+            // Get the role for "Player"
+            var playerRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Player");
+
+            // Filter the users to include only those with the "Player" role
+            var playerIds = await _context.UserRoles
+                                          .Where(ur => ur.RoleId == playerRole.Id)
+                                          .Select(ur => ur.UserId)
+                                          .ToListAsync();
+
+            var players = _context.UserProfiles.Where(up => playerIds.Contains(up.Id));
+
+            // Apply Position Filter
+            if (!string.IsNullOrEmpty(position))
+            {
+                players = players.Where(up => up.Position == position);
+            }
+
+            // Apply Nationality Filter
+            if (!string.IsNullOrEmpty(nationality))
+            {
+                players = players.Where(up => up.Nationality == nationality);
+            }
+
+            // Convert the queryable players to a list
+            var playerList = await players.ToListAsync();
+
+            // Calculate Age for Each Player
+            foreach (var player in playerList)
+            {
+                if (player.DateOfBirth.HasValue)
+                {
+                    var today = DateTime.Today;
+                    var age = today.Year - player.DateOfBirth.Value.Year;
+                    if (player.DateOfBirth.Value.Date > today.AddYears(-age)) age--; // Adjust if the birthday hasn't occurred yet this year
+                    player.Age = age; // Assuming you have an 'Age' property in the UserProfile model
+                }
+            }
+
+            // Apply Age Sorting
+            switch (sortOrder)
+            {
+                case "age_asc":
+                    playerList = playerList.OrderBy(p => p.Age).ToList();
+                    break;
+                case "age_desc":
+                    playerList = playerList.OrderByDescending(p => p.Age).ToList();
+                    break;
+                default:
+                    playerList = playerList.OrderBy(p => p.Firstname).ToList(); // Default sorting by name
+                    break;
+            }
+
+
+
+
+            // Handle Positions
+            var hardcodedPositions = new List<string> { "Goalkeeper", "Defender", "Midfielder", "Forward" };
+
+            // Retrieve distinct positions from the database and filter out any empty or null positions
+            var distinctPositions = await _context.UserProfiles
+                                                  .Where(p => !string.IsNullOrWhiteSpace(p.Position))
+                                                  .Select(p => p.Position.Trim())  // Change: Trimming white spaces to ensure consistency
+                                                  .Distinct()
+                                                  .ToListAsync();
+
+            // Combine hardcoded positions with distinct positions, ensuring no duplicates
+            var combinedPositions = hardcodedPositions
+                .Concat(distinctPositions.Except(hardcodedPositions))
+                .Distinct()
+                .ToList();
+
+            // Debugging output to verify what is happening with Positions
+            if (combinedPositions == null || !combinedPositions.Any())
+            {
+                Console.WriteLine("No positions found or combinedPositions is null.");
+            }
+            else
+            {
+                Console.WriteLine("Positions found: " + string.Join(", ", combinedPositions));
+            }
+
+            // Populate the ViewBag with the positions for the dropdown
+            ViewBag.Positions = new SelectList(combinedPositions, position);
+
+            // Handle Nationalities
+            var allCountries = ListHelpers.GetCountryList();  // Change: Fetching all possible countries
+
+            var distinctNationalities = await _context.UserProfiles
+                                                      .Where(p => !string.IsNullOrWhiteSpace(p.Nationality))
+                                                      .Select(p => p.Nationality.Trim())  // Change: Trimming white spaces to ensure consistency
+                                                      .Distinct()
+                                                      .ToListAsync();
+
+            // Combine all possible countries with those currently used, ensuring no duplicates
+            var combinedNationalities = allCountries
+                .Concat(distinctNationalities.Except(allCountries))
+                .Distinct()
+                .ToList();
+
+            if (combinedNationalities == null || !combinedNationalities.Any())
+            {
+                Console.WriteLine("No nationalities found or combinedNationalities is null.");
+            }
+            else
+            {
+                Console.WriteLine("Nationalities found: " + string.Join(", ", combinedNationalities));
+            }
+
+            // Populate the ViewBag with the nationalities for the dropdown
+            ViewBag.Nationalities = new SelectList(combinedNationalities, nationality);
+
+            // Maintain the selected sort order in the ViewBag
+            ViewBag.CurrentSortOrder = sortOrder;
+
+            return View(playerList);
         }
 
+
         // GET: Player/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == null || _context.PlayerList == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var playerListEntity = await _context.PlayerList
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (playerListEntity == null)
+            var playerProfile = await _context.UserProfiles.FirstOrDefaultAsync(up => up.Id == id);
+            if (playerProfile == null)
             {
                 return NotFound();
             }
 
-            return View(playerListEntity);
+            // Calculate age
+            if (playerProfile.DateOfBirth.HasValue)
+            {
+                var today = DateTime.Today;
+                var age = today.Year - playerProfile.DateOfBirth.Value.Year;
+                if (playerProfile.DateOfBirth.Value.Date > today.AddYears(-age)) age--; // Adjust if the birthday hasn't occurred yet this year
+                ViewBag.Age = age;
+            }
+
+            return View(playerProfile);
         }
 
         // GET: Player/Create

@@ -1,53 +1,150 @@
-﻿@model IEnumerable<FootballScoutApp.Models.PlayerListEntity>
+﻿@model IEnumerable<FootballScoutApp.Models.UserProfile>
 
-@{
-    ViewData["Title"] = "Index";
+<h2>Player List</h2>
+
+<form method="get" asp-action="Index">
+    <div class="form-group">
+        <label for="Position">Position</label>
+        <select name="position" class="form-control" id="Position">
+            @* Default "All" option *@
+            @if (string.IsNullOrEmpty(ViewBag.SelectedPosition))
+            {
+                <option value="" selected>All</option>
+            }
+            else
+            {
+                <option value="">All</option>
+            }
+
+            @* Dynamically generated options *@
+            @if (ViewBag.Positions != null)
+            {
+                foreach (var pos in (SelectList)ViewBag.Positions)
+                {
+                    if (pos.Value == ViewBag.SelectedPosition)
+                    {
+                        <option value="@pos.Value" selected>@pos.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@pos.Value">@pos.Text</option>
+                    }
+                }
+            }
+            else
+            {
+                <option>No positions available</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="nationality">Nationality</label>
+        <select id="nationality" name="nationality" class="form-control">
+            <option value="">All</option>
+            @if (ViewBag.Nationalities != null)
+            {
+                foreach (var item in (SelectList)ViewBag.Nationalities)
+                {
+                    if (item.Value == ViewBag.SelectedNationality)
+                    {
+                        <option value="@item.Value" selected>@item.Text</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                }
+            }
+            else
+            {
+                <option>No nationalities available</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="sortOrder">Sort by Age:</label>
+        <select id="sortOrder" name="sortOrder" class="form-control">
+            @* Default option *@
+            @if (ViewBag.CurrentSortOrder == null || ViewBag.CurrentSortOrder == "")
+            {
+                <option value="" selected>Select</option>
+            }
+            else
+            {
+                <option value="">Select</option>
+            }
+
+            @* Option for Youngest to Oldest *@
+            @if (ViewBag.CurrentSortOrder == "age_asc")
+            {
+                <option value="age_asc" selected>Youngest to Oldest</option>
+            }
+            else
+            {
+                <option value="age_asc">Youngest to Oldest</option>
+            }
+
+            @* Option for Oldest to Youngest *@
+            @if (ViewBag.CurrentSortOrder == "age_desc")
+            {
+                <option value="age_desc" selected>Oldest to Youngest</option>
+            }
+            else
+            {
+                <option value="age_desc">Oldest to Youngest</option>
+            }
+        </select>
+        </select>
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>
+
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Photo</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Age</th>
+                <th>Nationality</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var player in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(player.ProfilePhotoPath))
+                        {
+                            <img src="@player.ProfilePhotoPath" alt="Profile Photo" style="width: 50px; height: 50px;" />
+                        }
+                        else
+                        {
+                            <p>No photo</p>
+                        }
+                    </td>
+                    <td>@player.Firstname @player.Lastname</td>
+                    <td>@player.Position</td>
+                    <td>@player.Age</td>
+                    <td>@player.Nationality</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@player.Id" class="btn btn-primary">View Profile</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Email)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Position)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Position)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+else
+{
+    <p>No players found.</p>
 }
-    </tbody>
-</table>

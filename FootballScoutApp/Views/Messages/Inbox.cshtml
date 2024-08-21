@@ -1,0 +1,54 @@
+﻿@model IEnumerable<FootballScoutApp.Models.Message>
+
+<h2>Inbox</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>From</th>
+            <th>Message</th>
+            <th>Date</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var message in Model)
+        {
+            <tr>
+                <td>@message.Sender.UserName</td>
+                <td>@message.Content</td>
+                <td>@message.Timestamp</td>
+                <td>
+                    <form method="post" asp-action="ToggleImportant" asp-route-id="@message.Id">
+                        <button type="submit" class="btn btn-@(message.IsImportant ? "danger" : "secondary")">
+                            @if (message.IsImportant)
+                            {
+                                <a href="#" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-star"></i> Unmark
+                                </a>
+
+                                
+                                    }
+                            else
+                            {
+                                <a href="#" class="btn btn-sm btn-warning">
+                                    <i class="far fa-star"></i>
+                                    Mark as Important
+                                </a>
+                                
+                                    }
+                        </button>
+                    </form>
+                </td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = message.Id })">View</a>
+                </td>
+                <td>
+                    <form method="post" asp-action="Delete" asp-route-id="@message.Id">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
