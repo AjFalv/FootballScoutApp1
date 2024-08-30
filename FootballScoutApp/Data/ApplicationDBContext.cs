@@ -15,7 +15,7 @@ namespace FootballScoutApp.Data
 
         public DbSet<ApplicationUser> ApplicationUser { get; set; }
 
-        public DbSet<PreviousClub> PreviousClubs { get; set; }
+        //public DbSet<PreviousClub> PreviousClubs { get; set; }
 
         public DbSet<UserProfile> UserProfiles { get; set; }
 
@@ -48,6 +48,7 @@ namespace FootballScoutApp.Data
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete to avoid multiple cascade paths
 
+            
         }
     }
 }

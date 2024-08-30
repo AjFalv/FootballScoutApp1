@@ -2,7 +2,282 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid position-relative" style="background-image: url('/images/template/img2.jpg'); background-size: cover; background-position: center; height: 350px;">
+    <!-- Overlay -->
+    <div style="background-color: rgba(52, 58, 64, 0.9); position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></div>
+
+    <!-- Content -->
+    <div class="container text-center text-white position-relative" style="z-index: 2; padding-top: 150px;">
+        <h1>Welcome to ScoutXchange</h1>
+        <p class="lead">Your ultimate tool for scouting football talent.</p>
+    </div>
 </div>
+
+
+
+
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card border-0 shadow h-100 text-center homepage-feature-card">
+                <div class="card-body">
+                    <i class="fas fa-futbol fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Direct Player-Scout Connections</h3>
+                    <p class="card-text">Facilitate direct communication between players and scouts, allowing scouts to discover talent firsthand and
+                        players to showcase their skills to the right audience.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow h-100 text-center homepage-feature-card">
+                <div class="card-body">
+                    <i class="fas fa-users fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">
+                        In-Depth Player Profiles
+                    </h3>
+                    <p class="card-text">
+                        
+                        Players can create detailed, verified profiles complete with stats, videos, 
+                        and achievements, making it easier for scouts to find and assess potential signings.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow h-100 text-center homepage-feature-card">
+                <div class="card-body">
+                    <i class="fas fa-chart-line fa-3x mb-3 text-primary"></i>
+                    <h3 class="card-title">Advanced Search and Filtering</h3>
+                    <p class="card-text">Allows scouts to perform detailed searches and filter players based on specific criteria such as position, age and more,
+                        ensuring they find the exact talent they need.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid bg-dark text-white py-5">
+    <div class="container text-center">
+        <h2>Why Choose Us?</h2>
+        <p class="lead" style="padding:20px;">
+            ScoutXchange is your gateway to a smarter, more efficient scouting experience.
+            Whether you're a scout searching for the next big talent or a player looking to showcase your skills to the right audience, 
+            our platform offers the tools and features you need to succeed. With direct connections, in-depth profiles, 
+            and advanced search capabilities, ScoutXchange bridges the gap between talent and opportunity. 
+            Join us and discover why so many in the football community trust ScoutXchange 
+            to make their scouting and career advancement seamless and effective.</p>
+    </div>
+</div>
+
+<div class="container my-5" style="padding-bottom: 0 !important; margin-bottom: 0 !important; height:275px!important;">
+    <h2 class="text-center text-black mb-4">What People Are Saying</h2>
+    <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Review 1 -->
+            <div class="carousel-item active">
+                <div class="d-flex justify-content-center">
+                    <div class="card bg-dark text-white p-3" style="max-width: 700px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 text-center">
+                                <img src="/images/template/scout1.jpg" alt="Reviewer 1" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Jason Wilcox</h5>
+                                    <p class="card-text">Chief Scout, Manchester United</p>
+                                    <p class="card-text">"ScoutXchange has transformed the way we discover talent. The platform is intuitive and powerful."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 2 -->
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center">
+                    <div class="card bg-dark text-white p-3" style="max-width: 700px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 text-center">
+                                <img src="/images/template/player2.png" alt="Reviewer 2" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Diego Maradonna</h5>
+                                    <p class="card-text">Attacker, Barcelona FC</p>
+                                    <p class="card-text">"Through ScoutXchange, I was able to highlight my achievements and skills in a professional manner. The direct communication with scouts was a game-changer for my career."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 3 -->
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center">
+                    <div class="card bg-dark text-white p-3" style="max-width: 700px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 text-center">
+                                <img src="/images/template/player1.jpg" alt="Reviewer 2" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Kobbie Manioo</h5>
+                                    <p class="card-text">Midfielder, Manchester United</p>
+                                    <p class="card-text">"ScoutXchange gave me the platform to showcase my skills to the world. The connection I made through this platform helped me land my dream contract. It's a must-use for any aspiring player!"</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 4 --> 
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center">
+                    <div class="card bg-dark text-white p-3" style="max-width: 700px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 text-center">
+                                <img src="/images/template/scout2.jpg" alt="Reviewer 2" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Paul Mitchell</h5>
+                                    <p class="card-text">Head Scout, Newcastle United</p>
+                                    <p class="card-text">"ScoutXchange has streamlined the scouting process, making it easier to find the exact talent we need. The platform’s comprehensive player profiles are invaluable for assessing potential signings."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 5 -->
+            <div class="carousel-item">
+                <div class="d-flex justify-content-center">
+                    <div class="card bg-dark text-white p-3" style="max-width: 700px;">
+                        <div class="row g-0">
+                            <div class="col-md-4 text-center">
+                                <img src="/images/template/scout3.jpg" alt="Reviewer 2" class="img-fluid rounded-circle" style="width: 100px; height: 100px;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sir Alex Ferguson</h5>
+                                    <p class="card-text">Legendary Manager, Manchester United</p>
+                                    <p class="card-text">"Having been in the game for decades, I can confidently say that ScoutXchange is a revolutionary tool. It bridges the gap between players and scouts in a way that benefits the entire football ecosystem."</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Add additional carousel items for more reviews -->
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+
+
+
+<div class="container my-5" style="background-color:#343a40; padding:20px; margin-top: 0;">
+    <h2 class="text-center text-white mb-4">Contact Us</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <form>
+                <div class="mb-3">
+                    <label for="name" class="form-label text-white">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Your Name">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label text-white">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="Your Email">
+                </div>
+                <div class="mb-3">
+                    <label for="message" class="form-label text-white">Message</label>
+                    <textarea class="form-control" id="message" rows="5" placeholder="Your Message"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Send Message</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-white">
+            <h4>Contact Details</h4>
+            <p><i class="fas fa-phone-alt"></i> Phone: +123 456 7890</p>
+            <p><i class="fas fa-envelope"></i> Email: info@scoutxchange.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Address: 123 Football Lane, Cork, Ireland</p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+ 
+    .homepage-feature-card {
+        background-color: white; /* Example background color */
+        color:black; /* Text color for content within the card */
+        border: 2.5px solid #343a40 !important; /* Add border around the card */
+        border-radius: 8px !important; /* Optional: Add rounded corners */
+        padding: 20px !important; /* Padding inside the card */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important; /* Optional: Add a shadow for depth */
+    }
+
+    .homepage-feature-card .card-body {
+        padding: 20px; /* Adjust padding as necessary */
+    }
+
+    .homepage-feature-card h3 {
+        margin-top: 0px; /* Adjust the top margin to align headers */
+        color:black !important;
+    }
+
+    #reviewsCarousel {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+        #reviewsCarousel .carousel-item {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        #reviewsCarousel .card {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+
+    .container.my-5 {
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+    }
+
+    .container-fluid {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    .contact-section {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+
+</style>
+
+
+

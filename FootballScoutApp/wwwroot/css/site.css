@@ -1,22 +1,380 @@
-html {
-  font-size: 14px;
+
+.header-area {
+    position: relative;
+    z-index: 100;
+    padding: 10px 0;
+    
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.header-sticky .navbar {
+    background-color: #343a40 !important;
+    color: #fff !important;
+    transition: background 0.3s ease;
+    padding: 0;
+    
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    .header-sticky .navbar.fixed-top {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        
+    }
+
+    /*.header-sticky .navbar.scrolled {
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }*/
+
+.navbar {
+    background-color: #343a40 !important; /* Match the background color with the footer */
+    color: #fff !important; /* Ensure the text is white */
+    height: fit-content !important;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+    .navbar .nav-link {
+        color: #fff !important;
+        transition: color 0.3s ease;
+        padding: 8px 15px;
+    }
+
+    .navbar .nav-link:hover {
+        color: #cccccc; /* Slightly lighter color on hover */
+    }
+
+.navbar-brand h1 {
+    color: #fff;
+    font-size: 2rem; /* Larger font size */
+    font-weight: bold; /* Bold weight for emphasis */
+    margin: 0;
+    padding: 200px !important;
+    line-height: 1; /* Ensure the text doesn't take up too much space vertically */
+    display: flex;
+    align-items: center; /* Vertically align with navbar links */
 }
+
+    .navbar-brand h1 a {
+        color: #fff; /* Ensures the link is white */
+        text-decoration: none; /* Removes the underline */
+    }
+
+/* Override any existing styles for the brand name */
+.navbar-brand {
+    font-size: 3rem; /* Adjust to the desired size */
+    color: #fff; /* Ensure the brand name is white */
+}
+
+.navbar-nav .nav-item {
+    margin-right: 25px !important;
+    margin-left: 60px !important;
+    margin-top: 10px !important; /* Adjust this value to reduce or increase spacing */
+}
+
+    .navbar-nav .nav-item .dropdown-menu {
+        margin-top: 0.5rem;
+        background-color: #343a40; /* Match the navbar background */
+        border: none;
+        border-radius: 0;
+    }
+
+.navbar-nav .nav-link {
+    padding-right: 10px !important; /* Adjust padding to make links closer together */
+    padding-left: 10px !important;
+}
+
+
+
+.navbar-nav .nav-link.dropdown-toggle {
+    color: #ffffff !important; /* Replace #333 with any color you prefer*/
+}
+
+.navbar .dropdown-menu {
+    background-color: #ffffff !important; /* Match dropdown background to the navbar */
+    color: #000000 !important; /* White text color for dropdown */
+}
+
+.navbar .dropdown-item {
+    color: #000000 !important; /* White text color for dropdown items */
+}
+
+    .navbar .dropdown-item:hover {
+        background-color: #495057; /* Slightly darker background on hover */
+        color: #ffffff;
+    }
+
+.navbar .dropdown-toggle::after {
+    color: #ffffff; /* White dropdown arrow */
+}
+
+/* Change the color of the logout button to black */
+.logout-btn {
+    color: #000 !important;
+}
+
+    /* Optional: Change the hover effect */
+.logout-btn:hover {
+    color: #fff !important; /* Sets the text color to white on hover */
+    background-color: #495057 !important; /* Set background to black on hover */
+}
+
 
 body {
-  margin-bottom: 60px;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
+
+
+.main-content {
+    flex: 1;
+    margin-top: 100px; /* Adjust this value based on your navbar height */
+}
+
+/* FOOTER */
+.footer {
+    background-color: #343a40 !important; /* Set your desired background color */
+    color: #fff !important; /* Ensure the text is white */
+    padding: 10px 0 !important; /* Adjust padding to set the desired height */
+    text-align: center !important; /* Center the text */
+    border-radius: 0 !important; /* Remove rounded corners */
+    border-top: none !important; /* Remove any top border */
+    height: 50px !important; /* Ensure the height is set by the content */
+}
+
+    .footer a {
+        color: #fff !important; /* Ensure links are white */
+        text-decoration: none; /* Remove underline */
+    }
+
+        .footer a:hover {
+            color: #ccc !important; /* Slightly change link color on hover */
+        }
+
+
+
+
+
+/* Index.cshtml (HOME PAGE) */
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.bg-dark {
+    background-color: #343a40 !important;
+    color: #ffffff;
+}
+
+.container-fluid {
+    padding-left: 15px;
+    padding-right: 25px;
+    margin-top: 20px;
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+.lead {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+/* Index.cshtml (PLAYER) */
+
+.card-body {
+    /*background-color: #343a40;*/
+    padding: 15px;
+    /*color:white;*/
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    /*color:white;*/
+}
+.text-muted {
+    color: black !important;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    /*color:white;*/
+}
+
+.btn-sm {
+    font-size: 0.8rem;
+}
+
+.form-group label {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.form-control {
+    /*height: calc(2.25rem + 2px);
+    font-size: 1rem;*/
+    border-radius: 0.5rem; /* Increase the border-radius for a more modern look */
+    border: 2px solid #007bff; /* Make the border thicker and blue */
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+    .form-control:focus {
+        border-color: #0056b3;
+        box-shadow: 0 0 8px rgba(0, 86, 179, 0.5); /* Stronger shadow effect */
+    }
+
+.btn-primary {
+    padding: 0.6rem 1.2rem;
+    font-size: 1.1rem;
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 0.5rem; /* Match the border-radius with the form-control */
+    transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+.form-control::placeholder {
+    color: #6c757d; /* Placeholder text color */
+    opacity: 1; /* Make sure the placeholder is fully visible */
+}
+
+.select-style select {
+    padding: 0.5rem 1rem;
+    appearance: none; /* Remove default arrow */
+    background: url('path-to-custom-arrow.png') no-repeat right center; /* Custom arrow icon */
+    background-size: 15px;
+}
+
+
+/* General Section Styling */
+.section-container {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+    /* Heading Styling */
+    .section-container h3 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+/* Form Group Spacing */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Gallery Styling */
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.gallery-item {
+    margin: 5px;
+    border: 1px solid #ddd;
+    padding: 5px;
+}
+
+    .gallery-item img {
+        max-width: 100%;
+        height: auto;
+    }
+
+
+.container {
+    max-width: 1200px;
+    margin: auto;
+}
+
+.profile-image {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .card:hover {
+        transform: translateY(-10px);
+        transition: transform 0.3s ease-in-out;
+    }
+
+
+    .card h3 {
+        font-size: 1.75rem;
+        color: #007bff;
+    }
+
+    .card .form-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+.mt-3 {
+    margin-top: 1rem !important;
+}
+
+.mb-4 {
+    margin-bottom: 1.5rem !important;
+}
+
+.mb-5 {
+    margin-bottom: 3rem !important;
+}
+
+.display-4 {
+    font-weight: 700;
+    color: #333;
+}
+
+
+/* Video-carousel Styling */
+.carousel-item {
+    height: 400px; /* Adjust this value as needed */
+}
+
+    .carousel-item iframe {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+
+.table-hover tbody tr:hover {
+    background-color: #495057;
+}
+
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.btn {
+    transition: background-color 0.3s ease;
+}
+
+    .btn:hover {
+        background-color: #0056b3;
+    }
+
+
+

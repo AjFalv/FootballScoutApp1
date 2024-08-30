@@ -21,9 +21,12 @@ namespace FootballScoutApp.Models
         public int? Height { get; set; } // Height in cm
         public int? Weight { get; set; } // Weight in kg
         public string? InjuryHistory { get; set; } // Injury History
-        public string? PreviousClubsJson { get; set; } // Previous Clubs
+
+        /*public string? PreviousClubsJson { get; set; }*/ // JSON Serialization could not get to work. 
         public string? ProfilePhotoPath { get; set; }
         public string? YoutubeVideoUrlsJson { get; set; } // Store multiple YouTube video URLs as a JSON string
+
+        public string? GalleryImagePathsJson { get; set; }
 
         // Scouting Profile Fields 
         public string? CurrentAffiliation { get; set; } // Current Club/Organization
@@ -35,22 +38,36 @@ namespace FootballScoutApp.Models
         public string? ScoutingPhilosophy { get; set; } // Scouting philosophy
         public string? ContactEmail { get; set; } // Contact email
 
+            // First Previous Club
+            public string? PreviousClub1Name { get; set; }
+            public int? PreviousClub1YearFrom { get; set; }
+            public int? PreviousClub1YearTo { get; set; }
+            public int? PreviousClub1Appearances { get; set; }
+            public int? PreviousClub1Goals { get; set; }
+            public int? PreviousClub1CleanSheets { get; set; }
+
+            // Second Previous Club
+            public string? PreviousClub2Name { get; set; }
+            public int? PreviousClub2YearFrom { get; set; }
+            public int? PreviousClub2YearTo { get; set; }
+            public int? PreviousClub2Appearances { get; set; }
+            public int? PreviousClub2Goals { get; set; }
+            public int? PreviousClub2CleanSheets { get; set; }
+
+            // Third Previous Club
+            public string? PreviousClub3Name { get; set; }
+            public int? PreviousClub3YearFrom { get; set; }
+            public int? PreviousClub3YearTo { get; set; }
+            public int? PreviousClub3Appearances { get; set; }
+            public int? PreviousClub3Goals { get; set; }
+            public int? PreviousClub3CleanSheets { get; set; }
+
+            // Can add more clubs if necessary
+        
+
         public IdentityUser User { get; set; } // Navigation property
     }
 
-    public class PreviousClub
-    {
-        public int Id { get; set; }
-        // Explicitly define this as a foreign key to the UserProfile
-        [ForeignKey("UserProfile")]
-        public string? UserProfileId { get; set; } // Foreign key to UserProfile
-        public string? ClubName { get; set; } // New Field: Club Name
-        public int YearFrom { get; set; }
-        public int YearTo { get; set; }
-        public string? Appearances { get; set; }
-        public string? Goals { get; set; }
-        public string? CleanSheets { get; set; }
-
-        public UserProfile? UserProfile { get; set; } // Navigation property
-    }
+    
 }
+

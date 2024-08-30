@@ -4,119 +4,131 @@
     ViewData["Title"] = "Scout Profile";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h4>Manage your scout profile information.</h4>
+<h1 class="text-white">@ViewData["Title"]</h1>
 <hr />
-<div class="row">
-    <div class="col-md-6">
-        <form method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <!-- Personal Information Section -->
-            <div class="form-group">
-                <label asp-for="Input.Firstname"></label>
-                <input asp-for="Input.Firstname" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Lastname"></label>
-                <input asp-for="Input.Lastname" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.DateOfBirth"></label>
-                <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
-                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Nationality"></label>
-                <select asp-for="Input.Nationality" class="form-control">
-                    <option value="">Select Nationality</option>
-                    @foreach (var country in ViewData["Nationalities"] as List<string>)
-                    {
-                        <option value="@country">@country</option>
-                    }
-                </select>
-                <span asp-validation-for="Input.Nationality" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Birthplace"></label>
-                <input asp-for="Input.Birthplace" class="form-control" />
-                <span asp-validation-for="Input.Birthplace" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Bio"></label>
-                <textarea asp-for="Input.Bio" class="form-control"></textarea>
-                <span asp-validation-for="Input.Bio" class="text-danger"></span>
-            </div>
 
-            <!-- Professional Information Section -->
-            <div class="form-group">
-                <label asp-for="Input.CurrentAffiliation"></label>
-                <input asp-for="Input.CurrentAffiliation" class="form-control" />
-                <span asp-validation-for="Input.CurrentAffiliation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.ScoutingExperience"></label>
-                <input asp-for="Input.ScoutingExperience" class="form-control" type="number" />
-                <span asp-validation-for="Input.ScoutingExperience" class="text-danger"></span>
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <form method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="All" class="text-danger"></div>
 
-            <!-- Scouting Philosophy -->
-            <div class="form-group">
-                <label asp-for="Input.ScoutingPhilosophy"></label>
-                <textarea asp-for="Input.ScoutingPhilosophy" class="form-control"></textarea>
-                <span asp-validation-for="Input.ScoutingPhilosophy" class="text-danger"></span>
-            </div>
+                <!-- Profile Photo Section -->
+                <div class="card shadow p-3 mb-5 bg-dark text-white rounded">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color:white;">Profile Photo</h3>
+                        <div class="form-group text-center">
+                            @if (!string.IsNullOrEmpty(Model.Input.ProfilePhotoPath))
+                            {
+                                <img src="@Model.Input.ProfilePhotoPath" alt="Profile Photo" class="img-fluid rounded-circle" style="max-width: 200px;" />
+                            }
+                            else
+                            {
+                                <p>No photo uploaded</p>
+                            }
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Input.ProfilePhotoPath" class="form-control" type="file" />
+                            <span asp-validation-for="Input.ProfilePhotoPath" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Notable Players Scouted -->
-            <div class="form-group">
-                <label asp-for="Input.NotablePlayersScouted"></label>
-                <textarea asp-for="Input.NotablePlayersScouted" class="form-control"></textarea>
-                <span asp-validation-for="Input.NotablePlayersScouted" class="text-danger"></span>
-            </div>
 
-            <!-- Successful Transfers -->
-            <div class="form-group">
-                <label asp-for="Input.SuccessfulTransfers"></label>
-                <textarea asp-for="Input.SuccessfulTransfers" class="form-control"></textarea>
-                <span asp-validation-for="Input.SuccessfulTransfers" class="text-danger"></span>
-            </div>
+                <!-- Personal Details Section -->
+                <div class="card shadow p-3 mb-5 bg-dark text-white rounded">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color:white;">Personal Details</h3>
+                        <div class="form-group">
+                            <label asp-for="Input.Firstname">First Name</label>
+                            <input asp-for="Input.Firstname" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Lastname">Last Name</label>
+                            <input asp-for="Input.Lastname" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.DateOfBirth">Date Of Birth</label>
+                            <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
+                            <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Birthplace"></label>
+                            <input asp-for="Input.Birthplace" class="form-control" />
+                            <span asp-validation-for="Input.Birthplace" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Nationality"></label>
+                            <select asp-for="Input.Nationality" class="form-control">
+                                <option value="">Select Nationality</option>
+                                @foreach (var country in ViewData["Nationalities"] as List<string>)
+                                {
+                                    <option value="@country">@country</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Input.Nationality" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Bio"></label>
+                            <textarea asp-for="Input.Bio" class="form-control"></textarea>
+                            <span asp-validation-for="Input.Bio" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.ContactEmail">Contact Email</label>
+                            <input asp-for="Input.ContactEmail" class="form-control" />
+                            <span asp-validation-for="Input.ContactEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- Primary Regions Covered -->
-            <div class="form-group">
-                <label asp-for="Input.PrimaryRegions"></label>
-                <textarea asp-for="Input.PrimaryRegions" class="form-control"></textarea>
-                <span asp-validation-for="Input.PrimaryRegions" class="text-danger"></span>
-            </div>
+                <!-- Career Information Section -->
+                <div class="card shadow p-3 mb-5 bg-dark text-white rounded">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color:white;">Career Information</h3>
+                        <div class="form-group">
+                            <label asp-for="Input.CurrentAffiliation">Current Affiliation</label>
+                            <input asp-for="Input.CurrentAffiliation" class="form-control" />
+                            <span asp-validation-for="Input.CurrentAffiliation" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.ScoutingExperience">Scouting Experience</label>
+                            <input asp-for="Input.ScoutingExperience" class="form-control" type="number" />
+                            <span asp-validation-for="Input.ScoutingExperience" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.ScoutingPhilosophy">Scouting Philosophy</label>
+                            <textarea asp-for="Input.ScoutingPhilosophy" class="form-control"></textarea>
+                            <span asp-validation-for="Input.ScoutingPhilosophy" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.NotablePlayersScouted">Notable Players Scouted</label>
+                            <textarea asp-for="Input.NotablePlayersScouted" class="form-control"></textarea>
+                            <span asp-validation-for="Input.NotablePlayersScouted" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.SuccessfulTransfers">Successful Transfers</label>
+                            <textarea asp-for="Input.SuccessfulTransfers" class="form-control"></textarea>
+                            <span asp-validation-for="Input.SuccessfulTransfers" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.PrimaryRegions">Primary Regions</label>
+                            <textarea asp-for="Input.PrimaryRegions" class="form-control"></textarea>
+                            <span asp-validation-for="Input.PrimaryRegions" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.AchievementsAndAwards">Achievements And Awards</label>
+                            <textarea asp-for="Input.AchievementsAndAwards" class="form-control"></textarea>
+                            <span asp-validation-for="Input.AchievementsAndAwards" class="text-danger"></span>
+                        </div>
+                        
+                    </div>
+                </div>
 
-            <!-- Achievements and Awards -->
-            <div class="form-group">
-                <label asp-for="Input.AchievementsAndAwards"></label>
-                <textarea asp-for="Input.AchievementsAndAwards" class="form-control"></textarea>
-                <span asp-validation-for="Input.AchievementsAndAwards" class="text-danger"></span>
-            </div>
+               
 
-            <!-- Contact Email -->
-            <div class="form-group">
-                <label asp-for="Input.ContactEmail"></label>
-                <input asp-for="Input.ContactEmail" class="form-control" />
-                <span asp-validation-for="Input.ContactEmail" class="text-danger"></span>
-            </div>
-
-            <!-- Profile Photo Section -->
-            <div class="form-group">
-                <label>Profile Photo</label>
-                @if (!string.IsNullOrEmpty(Model.Input.ProfilePhotoPath))
-                {
-                    <img src="@Model.Input.ProfilePhotoPath" alt="Profile Photo" style="max-width:200px;" />
-                }
-                else
-                {
-                    <p>No photo uploaded</p>
-                }
-                <input asp-for="Input.ProfilePhotoPath" class="form-control" type="file" />
-                <span asp-validation-for="Input.ProfilePhotoPath" class="text-danger"></span>
-            </div>
-            <button type="submit" class="btn btn-primary">Update Profile</button>
-        </form>
+                <button type="submit" class="btn btn-primary" style="margin-bottom:10px;">Update Profile</button>
+            </form>
+        </div>
     </div>
 </div>
 

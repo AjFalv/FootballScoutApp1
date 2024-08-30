@@ -1,213 +1,225 @@
 ﻿@page
 @model FootballScoutApp.Areas.Identity.Pages.Account.Manage.PlayerProfileModel
-@{
-    ViewData["Title"] = "Player Profile";
-}
 
-<h1>@ViewData["Title"]</h1>
-<h4>Manage your player profile information.</h4>
-<hr />
-<div class="row">
+
+ 
+
+@*<div class="row">
     <div class="col-md-6">
         <form method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="All" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>*@
 
 
-            <!-- Display Profile Photo -->
-            <div class="form-group">
-                <label>Profile Photo</label>
-                @if (!string.IsNullOrEmpty(Model.Input.ProfilePhotoPath))
-                {
-                    <img src="@Model.Input.ProfilePhotoPath" alt="Profile Photo" style="max-width:200px;" />
-                }
-                else
-                {
-                    <p>No photo uploaded</p>
-                }
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-10 offset-lg-1">
+            <!-- Personal Details Section -->
+            <div class="card shadow p-3 mb-5 bg-white rounded" style="background-color: #343a40 !important; color: white;">
+                <div class="card-body">
+                    <h3 class="card-title" style="color:white;">Personal Details</h3>
+                    <div class="row">
+                        <!-- Profile photo on the left -->
+                        <div class="col-md-4 text-center">
+                            <div class="form-group">
+                                <label>Profile Photo</label>
+                                @if (!string.IsNullOrEmpty(Model.Input.ProfilePhotoPath))
+                                {
+                                    <img src="@Model.Input.ProfilePhotoPath" alt="Profile Photo" class="img-fluid rounded-circle" style="max-width: 200px;" />
+                                }
+                                else
+                                {
+                                    <p>No photo uploaded</p>
+                                }
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.ProfilePhoto">Upload New Photo</label>
+                                <input asp-for="Input.ProfilePhoto" class="form-control" type="file" />
+                            </div>
+                        </div>
 
-            <!-- Personal Information Section -->
-            <div class="form-group">
-                <label asp-for="Input.Firstname"></label>
-                <input asp-for="Input.Firstname" class="form-control" readonly />
+                        <!-- Form fields on the right -->
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label asp-for="Input.Firstname">First Name</label>
+                                <input asp-for="Input.Firstname" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Lastname">Last Name</label>
+                                <input asp-for="Input.Lastname" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.DateOfBirth">Date of Birth</label>
+                                <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Nationality">Nationality</label>
+                                <input asp-for="Input.Nationality" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Birthplace">Birthplace</label>
+                                <input asp-for="Input.Birthplace" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Input.Bio">Bio</label>
+                                <textarea asp-for="Input.Bio" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Lastname"></label>
-                <input asp-for="Input.Lastname" class="form-control" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.DateOfBirth"></label>
-                <input asp-for="Input.DateOfBirth" class="form-control" type="date" />
-                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Nationality"></label>
-                <select asp-for="Input.Nationality" class="form-control">
-                    <option value="">Select Nationality</option>
-                    @foreach (var country in ViewData["Nationalities"] as List<string>)
-                    {
-                        <option value="@country">@country</option>
-                    }
-                </select>
-                <span asp-validation-for="Input.Nationality" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Birthplace"></label>
-                <input asp-for="Input.Birthplace" class="form-control" />
-                <span asp-validation-for="Input.Birthplace" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Bio"></label>
-                <textarea asp-for="Input.Bio" class="form-control"></textarea>
-                <span asp-validation-for="Input.Bio" class="text-danger"></span>
-            </div>
-
 
             <!-- Player Information Section -->
-            <!-- Player Information Section -->
-            <div class="form-group">
-                <label asp-for="Input.Position"></label>
-                <select asp-for="Input.Position" class="form-control">
-                    <option value="">Select Position</option>
-                    <option value="Goalkeeper">Goalkeeper</option>
-                    <option value="Defender">Defender</option>
-                    <option value="Midfielder">Midfielder</option>
-                    <option value="Forward">Forward</option>
-                </select>
-                <span asp-validation-for="Input.Position" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.PreferredFoot"></label>
-                <select asp-for="Input.PreferredFoot" class="form-control">
-                    <option value="">Select Preferred Foot</option>
-                    <option value="Right">Right</option>
-                    <option value="Left">Left</option>
-                    <option value="Both">Both</option>
-                </select>
-                <span asp-validation-for="Input.PreferredFoot" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Height"></label>
-                <input asp-for="Input.Height" class="form-control" />
-                <span asp-validation-for="Input.Height" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.Weight"></label>
-                <input asp-for="Input.Weight" class="form-control" />
-                <span asp-validation-for="Input.Weight" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Input.InjuryHistory"></label>
-                <textarea asp-for="Input.InjuryHistory" class="form-control"></textarea>
-                <span asp-validation-for="Input.InjuryHistory" class="text-danger"></span>
+            <div class="section-container" style="background-color: #343a40 !important; color: white;">
+                <h3 style="color:white;">Player Information</h3>
+                <div class="form-group">
+                    <label asp-for="Input.Position"></label>
+                    <select asp-for="Input.Position" class="form-control">
+                        <option value="">Select Position</option>
+                        <option value="Goalkeeper">Goalkeeper</option>
+                        <option value="Defender">Defender</option>
+                        <option value="Midfielder">Midfielder</option>
+                        <option value="Forward">Forward</option>
+                    </select>
+                    <span asp-validation-for="Input.Position" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.PreferredFoot"> Preferred Foot</label>
+                    <select asp-for="Input.PreferredFoot" class="form-control">
+                        <option value="">Select Preferred Foot</option>
+                        <option value="Right">Right</option>
+                        <option value="Left">Left</option>
+                        <option value="Both">Both</option>
+                    </select>
+                    <span asp-validation-for="Input.PreferredFoot" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Height"></label>
+                    <input asp-for="Input.Height" class="form-control" />
+                    <span asp-validation-for="Input.Height" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Weight"></label>
+                    <input asp-for="Input.Weight" class="form-control" />
+                    <span asp-validation-for="Input.Weight" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.InjuryHistory">Injury History</label>
+                    <textarea asp-for="Input.InjuryHistory" class="form-control"></textarea>
+                    <span asp-validation-for="Input.InjuryHistory" class="text-danger"></span>
+                </div>
+
+                <!-- Previous Clubs Section -->
+                <h4>Previous Clubs</h4>
+                <div class="form-group">
+                    <label>Previous Club 1</label>
+                    <input asp-for="Input.PreviousClub1Name" class="form-control" placeholder="Club Name" />
+                    <input asp-for="Input.PreviousClub1YearFrom" class="form-control" placeholder="Year From" type="number" />
+                    <input asp-for="Input.PreviousClub1YearTo" class="form-control" placeholder="Year To" type="number" />
+                    <input asp-for="Input.PreviousClub1Appearances" class="form-control" placeholder="Appearances" type="number" />
+                    <input asp-for="Input.PreviousClub1Goals" class="form-control" placeholder="Goals" type="number" />
+                    <input asp-for="Input.PreviousClub1CleanSheets" class="form-control" placeholder="Clean Sheets" type="number" />
+                </div>
+                <div class="form-group">
+                    <label>Previous Club 2</label>
+                    <input asp-for="Input.PreviousClub2Name" class="form-control" placeholder="Club Name" />
+                    <input asp-for="Input.PreviousClub2YearFrom" class="form-control" placeholder="Year From" type="number" />
+                    <input asp-for="Input.PreviousClub2YearTo" class="form-control" placeholder="Year To" type="number" />
+                    <input asp-for="Input.PreviousClub2Appearances" class="form-control" placeholder="Appearances" type="number" />
+                    <input asp-for="Input.PreviousClub2Goals" class="form-control" placeholder="Goals" type="number" />
+                    <input asp-for="Input.PreviousClub2CleanSheets" class="form-control" placeholder="Clean Sheets" type="number" />
+                </div>
+                <div class="form-group">
+                    <label>Previous Club 3</label>
+                    <input asp-for="Input.PreviousClub3Name" class="form-control" placeholder="Club Name" />
+                    <input asp-for="Input.PreviousClub3YearFrom" class="form-control" placeholder="Year From" type="number" />
+                    <input asp-for="Input.PreviousClub3YearTo" class="form-control" placeholder="Year To" type="number" />
+                    <input asp-for="Input.PreviousClub3Appearances" class="form-control" placeholder="Appearances" type="number" />
+                    <input asp-for="Input.PreviousClub3Goals" class="form-control" placeholder="Goals" type="number" />
+                    <input asp-for="Input.PreviousClub3CleanSheets" class="form-control" placeholder="Clean Sheets" type="number" />
+                </div>
             </div>
 
-            <!-- Profile Photo Upload Section -->
-            <div class="form-group">
-                <label asp-for="Input.ProfilePhoto"></label>
-                <input asp-for="Input.ProfilePhoto" class="form-control" type="file" />
-                <span asp-validation-for="Input.ProfilePhoto" class="text-danger"></span>
-            </div>
 
-            <!-- YouTube Video Upload Section -->
-            <div class="form-group">
-                <label for="VideoUrl">Add Video URL</label>
-                <button type="button" class="btn btn-secondary mb-2" onclick="addYoutubeVideoRow()">Add Video</button>
 
-                <div id="youtubeVideosContainer">
-                    @if (Model.Input.YoutubeVideoUrls?.Count > 0)
-                    {
-                        @for (int i = 0; i < Model.Input.YoutubeVideoUrls.Count; i++)
+            <!-- Player Media Section -->
+            <div class="section-container" style="background-color: #343a40 !important; color: white;">
+                <h3 style="color:white;">Player Media</h3>
+
+                <!-- YouTube Video Upload Section -->
+                <div class="form-group">
+                    <label for="VideoUrl">Add Video URL</label>
+                    <button type="button" class="btn btn-secondary mb-2" onclick="addYoutubeVideoRow()">Add Video</button>
+
+                    <div id="youtubeVideosContainer">
+                        @if (Model.Input.YoutubeVideoUrls?.Count > 0)
                         {
-                            <div class="form-group" id="videoRow-@i">
-                                <!-- Hidden field to store the video URL -->
-                                <input type="hidden" name="Input.YoutubeVideoUrls[@i]" value="@Model.Input.YoutubeVideoUrls[i]" />
+                            @for (int i = 0; i < Model.Input.YoutubeVideoUrls.Count; i++)
+                            {
+                                <div class="form-group" id="videoRow-@i">
+                                    <!-- Hidden field to store the video URL -->
+                                    <input type="hidden" name="Input.YoutubeVideoUrls[@i]" value="@Model.Input.YoutubeVideoUrls[i]" />
 
-                                <!-- Display the video preview -->
-                                <div class="embed-responsive embed-responsive-16by9 mb-3">
-                                    <iframe class="embed-responsive-item"
-                                            src="https://www.youtube.com/embed/@Model.Input.YoutubeVideoUrls[i].Split('=')[1]"
-                                            allowfullscreen></iframe>
+                                    <!-- Display the video preview -->
+                                    <div class="embed-responsive embed-responsive-16by9 mb-3">
+                                        <iframe class="embed-responsive-item"
+                                                src="https://www.youtube.com/embed/@Model.Input.YoutubeVideoUrls[i].Split('=')[1]"
+                                                allowfullscreen></iframe>
+                                    </div>
+
+                                    <!-- Remove button -->
+                                    <button type="button" class="btn btn-danger" onclick="removeYoutubeVideoRow(@i)">Remove</button>
                                 </div>
+                            }
+                        }
+                    </div>
+                </div>
 
-                                <!-- Remove button -->
-                                <button type="button" class="btn btn-danger" onclick="removeYoutubeVideoRow(@i)">Remove</button>
+
+                <!-- Gallery Image Upload Section -->
+                <div class="form-group">
+                    <label for="GalleryImages">Upload Gallery Images</label>
+                    <input type="file" asp-for="Input.GalleryImages" multiple class="form-control" />
+                </div>
+
+                <!-- Display Gallery Images -->
+                <div class="gallery">
+                    @if (Model.Input.GalleryImagePaths?.Count > 0)
+                    {
+                        foreach (var imagePath in Model.Input.GalleryImagePaths)
+                        {
+                            <div class="gallery-item">
+                                <img src="@imagePath" alt="Gallery Image" style="max-width: 150px; margin: 10px;" />
                             </div>
                         }
+                    }
+                    else
+                    {
+                        <p>No images uploaded yet.</p>
                     }
                 </div>
             </div>
 
 
-            <!-- Previous Clubs Section -->
-            <div class="form-group">
-                <label>Previous Clubs</label>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Club Name</th>
-                            <th>Year From</th>
-                            <th>Year To</th>
-                            <th>Appearances</th>
-                            <th>Goals</th>
-                            <th>Clean Sheets</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Input.PreviousClubs?.Count > 0)
-                        {
-                            @for (int i = 0; i < Model.Input.PreviousClubs.Count; i++)
-                            {
-                                <tr>
-                                    <td><input asp-for="Input.PreviousClubs[@i].ClubName" class="form-control" /></td>
-                                    <td><input asp-for="Input.PreviousClubs[@i].YearFrom" class="form-control" type="number" /></td>
-                                    <td><input asp-for="Input.PreviousClubs[@i].YearTo" class="form-control" type="number" /></td>
-                                    <td><input asp-for="Input.PreviousClubs[@i].Appearances" class="form-control" /></td>
-                                    <td><input asp-for="Input.PreviousClubs[@i].Goals" class="form-control" /></td>
-                                    <td><input asp-for="Input.PreviousClubs[@i].CleanSheets" class="form-control" /></td>
-                                </tr>
-                            }
-                        }
-                        else
-                        {
-                            <!-- Provide a default row if there are no existing previous clubs -->
-                            <tr>
-                                <td><input name="Input.PreviousClubs[0].ClubName" class="form-control" /></td>
-                                <td><input name="Input.PreviousClubs[0].YearFrom" class="form-control" type="number" /></td>
-                                <td><input name="Input.PreviousClubs[0].YearTo" class="form-control" type="number" /></td>
-                                <td><input name="Input.PreviousClubs[0].Appearances" class="form-control" /></td>
-                                <td><input name="Input.PreviousClubs[0].Goals" class="form-control" /></td>
-                                <td><input name="Input.PreviousClubs[0].CleanSheets" class="form-control" /></td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-                <button type="button" class="btn btn-secondary" onclick="addPreviousClubRow()">Add Club</button>
-            </div>
 
-            <button type="submit" class="btn btn-primary">Save Profile</button>
-        </form>
+
+            <button type="submit" class="btn btn-primary" style="margin-bottom:10px;">Save Profile</button>
+        </div>
     </div>
 </div>
 
+
+
+
+
+
+
+            
+  @*      </form>
+    </div>
+</div>
+*@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <script>
-        function addPreviousClubRow() {
-            var table = document.querySelector('table tbody');
-            var row = document.createElement('tr');
-            var rowCount = table.rows.length;
-            row.innerHTML = `
-                        <td><input name="Input.PreviousClubs[${rowCount}].ClubName" class="form-control" /></td>
-                        <td><input name="Input.PreviousClubs[${rowCount}].YearFrom" class="form-control" type="number" /></td>
-                        <td><input name="Input.PreviousClubs[${rowCount}].YearTo" class="form-control" type="number" /></td>
-                        <td><input name="Input.PreviousClubs[${rowCount}].Appearances" class="form-control" /></td>
-                        <td><input name="Input.PreviousClubs[${rowCount}].Goals" class="form-control" /></td>
-                        <td><input name="Input.PreviousClubs[${rowCount}].CleanSheets" class="form-control" /></td>
-                    `;
-            table.appendChild(row);
-        }
-    </script>
     <script>
         function addYoutubeVideoRow() {
             var container = document.getElementById('youtubeVideosContainer');

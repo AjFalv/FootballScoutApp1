@@ -89,42 +89,6 @@ namespace FootballScoutApp.Migrations
                     b.ToTable("PlayerList");
                 });
 
-            modelBuilder.Entity("FootballScoutApp.Models.PreviousClub", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Appearances")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CleanSheets")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ClubName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Goals")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserProfileId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("YearFrom")
-                        .HasColumnType("int");
-
-                    b.Property<int>("YearTo")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserProfileId");
-
-                    b.ToTable("PreviousClubs");
-                });
-
             modelBuilder.Entity("FootballScoutApp.Models.UserProfile", b =>
                 {
                     b.Property<string>("Id")
@@ -155,6 +119,9 @@ namespace FootballScoutApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("GalleryImagePathsJson")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("Height")
                         .HasColumnType("int");
 
@@ -177,8 +144,59 @@ namespace FootballScoutApp.Migrations
                     b.Property<string>("PreferredFoot")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PreviousClubsJson")
+                    b.Property<int?>("PreviousClub1Appearances")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub1CleanSheets")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub1Goals")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PreviousClub1Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PreviousClub1YearFrom")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub1YearTo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub2Appearances")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub2CleanSheets")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub2Goals")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PreviousClub2Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PreviousClub2YearFrom")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub2YearTo")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub3Appearances")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub3CleanSheets")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub3Goals")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PreviousClub3Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PreviousClub3YearFrom")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PreviousClub3YearTo")
+                        .HasColumnType("int");
 
                     b.Property<string>("PrimaryRegions")
                         .HasColumnType("nvarchar(max)");
@@ -448,15 +466,6 @@ namespace FootballScoutApp.Migrations
                     b.Navigation("Receiver");
 
                     b.Navigation("Sender");
-                });
-
-            modelBuilder.Entity("FootballScoutApp.Models.PreviousClub", b =>
-                {
-                    b.HasOne("FootballScoutApp.Models.UserProfile", "UserProfile")
-                        .WithMany()
-                        .HasForeignKey("UserProfileId");
-
-                    b.Navigation("UserProfile");
                 });
 
             modelBuilder.Entity("FootballScoutApp.Models.UserProfile", b =>

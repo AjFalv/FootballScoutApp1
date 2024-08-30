@@ -1,150 +1,164 @@
-﻿@model IEnumerable<FootballScoutApp.Models.UserProfile>
+﻿
+
+@model IEnumerable<FootballScoutApp.Models.UserProfile>
 
 <h2>Player List</h2>
 
-<form method="get" asp-action="Index">
-    <div class="form-group">
-        <label for="Position">Position</label>
-        <select name="position" class="form-control" id="Position">
-            @* Default "All" option *@
-            @if (string.IsNullOrEmpty(ViewBag.SelectedPosition))
-            {
-                <option value="" selected>All</option>
-            }
-            else
-            {
-                <option value="">All</option>
-            }
 
-            @* Dynamically generated options *@
-            @if (ViewBag.Positions != null)
-            {
-                foreach (var pos in (SelectList)ViewBag.Positions)
-                {
-                    if (pos.Value == ViewBag.SelectedPosition)
+<form method="get" asp-action="Index" class="mb-4">
+    
+    <section style="background-color:#343a40; padding:30px; margin-bottom:15px;">
+    <div class="row">
+        <!-- Position Filter -->
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="Position" style="color:white;">Position</label>
+                <select name="position" class="form-control" id="Position">
+                    @if (string.IsNullOrEmpty(ViewBag.SelectedPosition))
                     {
-                        <option value="@pos.Value" selected>@pos.Text</option>
+                        <option value="" selected>All</option>
                     }
                     else
                     {
-                        <option value="@pos.Value">@pos.Text</option>
+                        <option value="">All</option>
                     }
-                }
-            }
-            else
-            {
-                <option>No positions available</option>
-            }
-        </select>
-    </div>
 
-    <div class="form-group">
-        <label for="nationality">Nationality</label>
-        <select id="nationality" name="nationality" class="form-control">
-            <option value="">All</option>
-            @if (ViewBag.Nationalities != null)
-            {
-                foreach (var item in (SelectList)ViewBag.Nationalities)
-                {
-                    if (item.Value == ViewBag.SelectedNationality)
+                    @if (ViewBag.Positions != null)
                     {
-                        <option value="@item.Value" selected>@item.Text</option>
+                        foreach (var pos in (SelectList)ViewBag.Positions)
+                        {
+                            if (pos.Value == ViewBag.SelectedPosition)
+                            {
+                                <option value="@pos.Value" selected>@pos.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@pos.Value">@pos.Text</option>
+                            }
+                        }
                     }
                     else
                     {
-                        <option value="@item.Value">@item.Text</option>
+                        <option>No positions available</option>
                     }
-                }
-            }
-            else
-            {
-                <option>No nationalities available</option>
-            }
-        </select>
+                </select>
+            </div>
+        </div>
+
+        <!-- Nationality Filter -->
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="nationality" style="color:white;">Nationality</label>
+                <select id="nationality" name="nationality" class="form-control">
+                    <option value="">All</option>
+                    @if (ViewBag.Nationalities != null)
+                    {
+                        foreach (var item in (SelectList)ViewBag.Nationalities)
+                        {
+                            if (item.Value == ViewBag.SelectedNationality)
+                            {
+                                <option value="@item.Value" selected>@item.Text</option>
+                            }
+                            else
+                            {
+                                <option value="@item.Value">@item.Text</option>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <option>No nationalities available</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <!-- Sort Order Filter -->
+        <div class="col-md-4">
+            <div class="form-group">
+                    <label for="sortOrder" style="color:white;">Sort by Age:</label>
+                <select id="sortOrder" name="sortOrder" class="form-control">
+                    @if (ViewBag.CurrentSortOrder == null || ViewBag.CurrentSortOrder == "")
+                    {
+                        <option value="" selected>Select</option>
+                    }
+                    else
+                    {
+                        <option value="">Select</option>
+                    }
+
+                    @if (ViewBag.CurrentSortOrder == "age_asc")
+                    {
+                        <option value="age_asc" selected>Youngest to Oldest</option>
+                    }
+                    else
+                    {
+                        <option value="age_asc">Youngest to Oldest</option>
+                    }
+
+                    @if (ViewBag.CurrentSortOrder == "age_desc")
+                    {
+                        <option value="age_desc" selected>Oldest to Youngest</option>
+                    }
+                    else
+                    {
+                        <option value="age_desc">Oldest to Youngest</option>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="text-right">
+        <button type="submit" class="btn btn-primary mt-3">Filter</button>
     </div>
 
-    <div class="form-group">
-        <label for="sortOrder">Sort by Age:</label>
-        <select id="sortOrder" name="sortOrder" class="form-control">
-            @* Default option *@
-            @if (ViewBag.CurrentSortOrder == null || ViewBag.CurrentSortOrder == "")
-            {
-                <option value="" selected>Select</option>
-            }
-            else
-            {
-                <option value="">Select</option>
-            }
-
-            @* Option for Youngest to Oldest *@
-            @if (ViewBag.CurrentSortOrder == "age_asc")
-            {
-                <option value="age_asc" selected>Youngest to Oldest</option>
-            }
-            else
-            {
-                <option value="age_asc">Youngest to Oldest</option>
-            }
-
-            @* Option for Oldest to Youngest *@
-            @if (ViewBag.CurrentSortOrder == "age_desc")
-            {
-                <option value="age_desc" selected>Oldest to Youngest</option>
-            }
-            else
-            {
-                <option value="age_desc">Oldest to Youngest</option>
-            }
-        </select>
-        </select>
-    </div>
-
-
-    <button type="submit" class="btn btn-primary">Filter</button>
+    </section>
 </form>
+
+
 
 <hr />
 
+<section style="background-color:#343a40; padding:30px; margin-bottom:15px;">
 @if (Model != null && Model.Any())
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Photo</th>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Age</th>
-                <th>Nationality</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="container">
+        <div class="row">
             @foreach (var player in Model)
             {
-                <tr>
-                    <td>
-                        @if (!string.IsNullOrEmpty(player.ProfilePhotoPath))
-                        {
-                            <img src="@player.ProfilePhotoPath" alt="Profile Photo" style="width: 50px; height: 50px;" />
-                        }
-                        else
-                        {
-                            <p>No photo</p>
-                        }
-                    </td>
-                    <td>@player.Firstname @player.Lastname</td>
-                    <td>@player.Position</td>
-                    <td>@player.Age</td>
-                    <td>@player.Nationality</td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@player.Id" class="btn btn-primary">View Profile</a>
-                    </td>
-                </tr>
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="row no-gutters">
+                            <div class="col-md-4 d-flex align-items-center justify-content-center" @*style="background-color:#343a40;"*@>
+                                @if (!string.IsNullOrEmpty(player.ProfilePhotoPath))
+                                {
+                                    <img src="@player.ProfilePhotoPath" alt="Profile Photo" class="img-fluid rounded-circle" style="width: 100px; height: 100px;" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/default-player.png" alt="Profile Photo" class="img-fluid rounded-circle" style="width: 100px; height: 100px;" />
+                                }
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card-body">
+                                    <h5 class="card-title">@player.Firstname @player.Lastname</h5>
+                                    <p class="card-text"><small class="text-muted">@player.Position</small></p>
+                                    <p class="card-text">Age: @player.Age</p>
+                                    <p class="card-text">Nationality: @player.Nationality</p>
+                                    <a asp-action="Details" asp-route-id="@player.Id" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> View Profile</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+        </div>
+    </div>
 }
 else
 {
     <p>No players found.</p>
 }
+</section>

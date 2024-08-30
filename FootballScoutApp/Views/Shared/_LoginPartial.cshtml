@@ -1,5 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using FootballScoutApp.Data
+@using FootballScoutApp.Areas.Identity.Pages.Account.Manage
+
 
 
 @inject SignInManager<IdentityUser> SignInManager
@@ -16,10 +18,100 @@
         }
         return 0;
     }
+
+    public async Task<bool> HasExternalLoginsAsync()
+    {
+        var externalLogins = await SignInManager.GetExternalAuthenticationSchemesAsync();
+        return externalLogins.Any();
+    }
+
 }
 
 
+<ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    @if (SignInManager.IsSignedIn(User))
+    {
+        @if (User.IsInRole("Player"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/PlayerProfile">Player Profile</a>
+            </li>
+        }
+        @if (User.IsInRole("Scout"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/ScoutProfile">Scout Profile</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" asp-area="" asp-controller="Player" asp-action="Index">Player List</a>
+            </li>
+        }
+
+        <!-- Messaging Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-dark" href="#" id="messagesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Messaging
+                @if (GetUnreadMessageCount() > 0)
+                {
+                    <span class="badge bg-danger">@GetUnreadMessageCount()</span>
+                }
+            </a>
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="messagesDropdown">
+                <a class="dropdown-item" asp-area="" asp-controller="Messages" asp-action="Inbox">Inbox</a>
+                <a class="dropdown-item" asp-area="" asp-controller="Messages" asp-action="Send">Send Message</a>
+            </div>
+        </li>
+    }
+</ul>
+
 <ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Hello @UserManager.GetUserName(User)!
+            </a>
+                <!-- Profile, Email, Password, Personal Data Links Not working -->
+            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                @*<a class="dropdown-item @ManageNavPages.IndexNavClass(ViewContext)" asp-page="/Account/Manage/Index">Profile</a>
+                <a class="dropdown-item @ManageNavPages.EmailNavClass(ViewContext)" asp-page="/Account/Manage/Email">Email</a>
+                <a class="dropdown-item @ManageNavPages.ChangePasswordNavClass(ViewContext)" asp-page="/Account/Manage/ChangePassword">Password</a>
+                <a class="dropdown-item @ManageNavPages.PersonalDataNavClass(ViewContext)" asp-page="/Account/Manage/PersonalData">Personal data</a>
+                
+                <!-- Conditional External Logins Link -->
+                @if (await HasExternalLoginsAsync())
+                {
+                    <a class="dropdown-item @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-page="/Account/Manage/ExternalLogins">External Logins</a>
+                }*@
+                    <!-- Divider -->
+                    <div class="dropdown-divider"></div>
+
+                    <!-- Logout-Btn -->
+                <form id="logoutForm" class="dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button id="logout" type="submit" class="nav-link btn btn-link logout-btn text-dark border-0" style="color:black !important">Logout</button>
+                </form>
+            </div>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>
+
+
+
+
+@*<ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item dropdown">
@@ -64,4 +156,4 @@
             <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     }
-</ul>
+</ul>*@
